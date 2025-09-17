@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>26團網站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23228B22" stroke="%23FFD700" stroke-width="2"/><path d="M16 6 L18 12 L24 12 L19.5 16 L21.5 22 L16 18.5 L10.5 22 L12.5 16 L8 12 L14 12 Z" fill="%23FFD700"/><circle cx="16" cy="16" r="3" fill="%23FF0000"/></svg>') 16 16, auto;
+        }
+
+        /* 載入畫面 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* 載入文字 */
+        .loading-text {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* 進度條容器 */
+        .progress-container {
+            width: 300px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: visible;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* 進度條軌道 */
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* 進度條 */
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: gradient-shift 2s ease-in-out infinite;
+        }
+
+        /* 童軍角色 */
+        .scout-runner {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            transition: left 0.3s ease;
+            z-index: 10;
+            animation: running 0.6s ease-in-out infinite;
+        }
+
+        @keyframes running {
+            0%, 100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            25% {
+                transform: translateY(-2px) rotate(2deg);
+            }
+            50% {
+                transform: translateY(0) rotate(-1deg);
+            }
+            75% {
+                transform: translateY(-1px) rotate(1deg);
+            }
+        }
+
+        /* 手臂動畫 */
+        .arm-left {
+            animation: arm-swing-left 0.4s ease-in-out infinite;
+            transform-origin: 15.5px 14px;
+        }
+
+        .arm-right {
+            animation: arm-swing-right 0.4s ease-in-out infinite;
+            transform-origin: 24.5px 14px;
+        }
+
+        @keyframes arm-swing-left {
+            0%, 100% {
+                transform: rotate(-30deg);
+            }
+            50% {
+                transform: rotate(20deg);
+            }
+        }
+
+        @keyframes arm-swing-right {
+            0%, 100% {
+                transform: rotate(30deg);
+            }
+            50% {
+                transform: rotate(-20deg);
+            }
+        }
+
+        /* 腿部動畫 */
+        .leg-left {
+            animation: leg-swing-left 0.4s ease-in-out infinite;
+            transform-origin: 18.75px 24px;
+        }
+
+        .leg-right {
+            animation: leg-swing-right 0.4s ease-in-out infinite;
+            transform-origin: 21.25px 24px;
+        }
+
+        @keyframes leg-swing-left {
+            0%, 100% {
+                transform: rotate(20deg);
+            }
+            50% {
+                transform: rotate(-30deg);
+            }
+        }
+
+        @keyframes leg-swing-right {
+            0%, 100% {
+                transform: rotate(-30deg);
+            }
+            50% {
+                transform: rotate(20deg);
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 百分比文字 */
+        .progress-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        /* 載入點動畫 */
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* 主要內容 */
+        .main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+            display: flex;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 側邊欄 */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: white;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-item {
+            margin: 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #feca57;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: #ff6b6b;
+        }
+
+        .sidebar-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 主要內容區域 */
+        .content-area {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .loading-text {
+                font-size: 1.5rem;
+            }
+            
+            .progress-container {
+                width: 250px;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .feature-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 100%;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content-area {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 200;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                padding: 0.5rem;
+                border-radius: 8px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        /* 內容區域樣式 */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .leader-profile {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 載入畫面 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">載入中...</div>
+        <div class="progress-container">
+            <div class="progress-track">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="scout-runner" id="scoutRunner">
+                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 頭部 -->
+                    <circle cx="20" cy="8" r="4" fill="#FDBCB4"/>
+                    
+                    <!-- 童軍帽 -->
+                    <path d="M16 4 L24 4 L25 7 L15 7 Z" fill="#8B4513"/>
+                    <circle cx="20" cy="5.5" r="1" fill="#FFD700"/>
+                    
+                    <!-- 身體 -->
+                    <rect x="17" y="12" width="6" height="12" rx="1" fill="#228B22"/>
+                    
+                    <!-- 童軍徽章 -->
+                    <circle cx="20" cy="16" r="1.5" fill="#FFD700"/>
+                    <rect x="18.5" y="18" width="3" height="1" fill="#FF0000"/>
+                    <rect x="18.5" y="19.5" width="3" height="1" fill="#0000FF"/>
+                    
+                    <!-- 領巾 -->
+                    <path d="M17 12 L23 12 L21 15 L19 15 Z" fill="#FF6B35"/>
+                    
+                    <!-- 手臂 (跑步動作) -->
+                    <g class="arm-left">
+                        <rect x="14" y="14" width="3" height="8" rx="1.5" fill="#FDBCB4" transform="rotate(-20 15.5 18)"/>
+                        <rect x="13" y="13" width="4" height="6" rx="1" fill="#228B22" transform="rotate(-20 15 16)"/>
+                    </g>
+                    <g class="arm-right">
+                        <rect x="23" y="14" width="3" height="8" rx="1.5" fill="#FDBCB4" transform="rotate(30 24.5 18)"/>
+                        <rect x="23" y="13" width="4" height="6" rx="1" fill="#228B22" transform="rotate(30 25 16)"/>
+                    </g>
+                    
+                    <!-- 腿部 (跑步動作) -->
+                    <g class="leg-left">
+                        <rect x="17.5" y="24" width="2.5" height="10" rx="1.25" fill="#000080" transform="rotate(15 18.75 29)"/>
+                        <circle cx="17" cy="35" r="1.5" fill="#8B4513"/>
+                    </g>
+                    <g class="leg-right">
+                        <rect x="20" y="24" width="2.5" height="10" rx="1.25" fill="#000080" transform="rotate(-25 21.25 29)"/>
+                        <circle cx="23" cy="32" r="1.5" fill="#8B4513"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="progress-text" id="progressText">0%</div>
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content" id="mainContent">
+        <!-- 手機版選單按鈕 -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+
+        <!-- 側邊欄 -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">童軍團</h2>
+                <p class="sidebar-subtitle">探索我們的歷史與活動</p>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#emblem" class="sidebar-link active" data-section="emblem">
+                        <span class="sidebar-icon">🛡️</span>
+                        團徽
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#history" class="sidebar-link" data-section="history">
+                        <span class="sidebar-icon">📚</span>
+                        團歷史
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#current-leader" class="sidebar-link" data-section="current-leader">
+                        <span class="sidebar-icon">👨‍💼</span>
+                        現任總團長
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#past-leaders" class="sidebar-link" data-section="past-leaders">
+                        <span class="sidebar-icon">🏆</span>
+                        歷任總團長
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#anthem" class="sidebar-link" data-section="anthem">
+                        <span class="sidebar-icon">🎵</span>
+                        團歌
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#activities" class="sidebar-link" data-section="activities">
+                        <span class="sidebar-icon">📸</span>
+                        各分團活動集錦
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#contact" class="sidebar-link" data-section="contact">
+                        <span class="sidebar-icon">📞</span>
+                        各分團聯絡資訊
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 內容區域 -->
+        <main class="content-area">
+            <div id="emblem" class="content-section active">
+                <h1 class="welcome-title">團徽</h1>
+                <p class="welcome-subtitle">
+                    我們的團徽象徵著童軍精神與傳統價值
+                </p>
+                
+                <div class="feature-cards">
+                    <div class="card">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">
+                            <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                <!-- 外圈 -->
+                                <circle cx="60" cy="60" r="55" fill="#228B22" stroke="#FFD700" stroke-width="4"/>
+                                
+                                <!-- 童軍百合花 -->
+                                <path d="M60 20 L65 35 L75 30 L70 45 L85 40 L75 55 L90 50 L75 65 L85 80 L70 75 L75 90 L65 85 L60 100 L55 85 L45 90 L50 75 L35 80 L45 65 L30 50 L45 55 L35 40 L50 45 L45 30 L55 35 Z" fill="#FFD700"/>
+                                
+                                <!-- 中心圓 -->
+                                <circle cx="60" cy="60" r="15" fill="#FF0000"/>
+                                
+                                <!-- 童軍繩結 -->
+                                <path d="M50 55 Q60 50 70 55 Q65 60 60 65 Q55 60 50 55" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+                                
+                                <!-- 底部文字區域 -->
+                                <rect x="20" y="85" width="80" height="20" fill="#000080" rx="5"/>
+                                <text x="60" y="97" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="bold">童軍團</text>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">團徽設計理念</h3>
+                        <p class="card-description">
+                            綠色圓形代表大自然與成長<br>
+                            金色百合花象徵純潔與榮譽<br>
+                            紅色中心代表熱忱與勇氣<br>
+                            藍色底條象徵忠誠與信念
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history" class="content-section">
+                <h1 class="welcome-title">團歷史</h1>
+                <p class="welcome-subtitle">
+                    我們童軍團成立於1985年，致力於培養青少年的品格與領導能力。
+                </p>
+                
+                <div class="feature-cards">
+                    <div class="card">
+                        <div class="card-icon">🏕️</div>
+                        <h3 class="card-title">成立初期</h3>
+                        <p class="card-description">1985年由熱心教育人士創立，從小小的團體開始</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🌟</div>
+                        <h3 class="card-title">茁壯成長</h3>
+                        <p class="card-description">經過多年發展，現已成為地區重要的青少年組織</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">未來展望</h3>
+                        <p class="card-description">持續培養更多優秀青少年，服務社會</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="current-leader" class="content-section">
+                <h1 class="welcome-title">現任總團長</h1>
+                <div class="leader-profile">
+                    <div class="card">
+                        <div class="card-icon">👨‍💼</div>
+                        <h3 class="card-title">張志明 總團長</h3>
+                        <p class="card-description">
+                            服務童軍運動超過20年，致力於青少年品格教育與戶外活動推廣。
+                            擁有豐富的領導經驗和教育背景。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="past-leaders" class="content-section">
+                <h1 class="welcome-title">歷任總團長</h1>
+                <div class="feature-cards">
+                    <div class="card">
+                        <div class="card-icon">🏆</div>
+                        <h3 class="card-title">李建國 (1985-1995)</h3>
+                        <p class="card-description">創團團長，奠定了團的基礎與傳統</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🏆</div>
+                        <h3 class="card-title">王美玲 (1995-2010)</h3>
+                        <p class="card-description">推動團務現代化，擴大服務範圍</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🏆</div>
+                        <h3 class="card-title">陳志華 (2010-2020)</h3>
+                        <p class="card-description">加強國際交流，提升團的知名度</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="anthem" class="content-section">
+                <h1 class="welcome-title">團歌</h1>
+                <div class="card">
+                    <div class="card-icon">🎵</div>
+                    <h3 class="card-title">我們的團歌</h3>
+                    <p class="card-description" style="line-height: 2; font-size: 1.1rem;">
+                        青春的歲月，勇敢的心<br>
+                        童軍精神，永遠傳承<br>
+                        服務他人，熱愛自然<br>
+                        團結友愛，共創未來<br><br>
+                        <em>讓我們一起唱響這首充滿希望的歌曲</em>
+                    </p>
+                </div>
+            </div>
+
+            <div id="activities" class="content-section">
+                <h1 class="welcome-title">各分團活動集錦</h1>
+                <div class="feature-cards">
+                    <div class="card">
+                        <div class="card-icon">🏕️</div>
+                        <h3 class="card-title">幼童軍團</h3>
+                        <p class="card-description">戶外探險、自然觀察、團體遊戲</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">童軍團</h3>
+                        <p class="card-description">野外求生、領導訓練、社區服務</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🏔️</div>
+                        <h3 class="card-title">行義童軍團</h3>
+                        <p class="card-description">登山健行、國際交流、專業技能培訓</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="content-section">
+                <h1 class="welcome-title">各分團聯絡資訊</h1>
+                <div class="feature-cards">
+                    <div class="card">
+                        <div class="card-icon">📞</div>
+                        <h3 class="card-title">幼童軍團</h3>
+                        <p class="card-description">
+                            團長：林小華<br>
+                            電話：02-1234-5678<br>
+                            Email：beaver@scouts.org.tw
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">📞</div>
+                        <h3 class="card-title">童軍團</h3>
+                        <p class="card-description">
+                            團長：陳大明<br>
+                            電話：02-2345-6789<br>
+                            Email：scout@scouts.org.tw
+                        </p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">📞</div>
+                        <h3 class="card-title">行義童軍團</h3>
+                        <p class="card-description">
+                            團長：黃志強<br>
+                            電話：02-3456-7890<br>
+                            Email：venture@scouts.org.tw
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 模擬載入進度
+        let progress = 0;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const scoutRunner = document.getElementById('scoutRunner');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+
+        // 載入階段和對應的載入時間
+        const loadingStages = [
+            { target: 20, delay: 300, text: '初始化...' },
+            { target: 45, delay: 500, text: '載入資源...' },
+            { target: 70, delay: 400, text: '準備內容...' },
+            { target: 90, delay: 300, text: '最後檢查...' },
+            { target: 100, delay: 200, text: '完成！' }
+        ];
+
+        let currentStage = 0;
+
+        function updateProgress() {
+            if (currentStage < loadingStages.length) {
+                const stage = loadingStages[currentStage];
+                
+                // 更新載入文字
+                document.querySelector('.loading-text').textContent = stage.text;
+                
+                // 平滑更新進度條
+                const increment = (stage.target - progress) / 20;
+                const updateInterval = setInterval(() => {
+                    progress += increment;
+                    if (progress >= stage.target) {
+                        progress = stage.target;
+                        clearInterval(updateInterval);
+                        
+                        // 進入下一階段
+                        currentStage++;
+                        if (currentStage < loadingStages.length) {
+                            setTimeout(updateProgress, stage.delay);
+                        } else {
+                            // 載入完成
+                            setTimeout(showMainContent, 500);
+                        }
+                    }
+                    
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = Math.round(progress) + '%';
+                    
+                    // 移動童軍位置 (考慮童軍寬度，所以最大位置是容器寬度減去童軍寬度)
+                    const containerWidth = 300; // 進度條容器寬度
+                    const scoutWidth = 40; // 童軍寬度
+                    const maxPosition = containerWidth - scoutWidth;
+                    const scoutPosition = (progress / 100) * maxPosition;
+                    scoutRunner.style.left = scoutPosition + 'px';
+                }, 50);
+            }
+        }
+
+        function showMainContent() {
+            // 隱藏載入畫面
+            loadingScreen.classList.add('hidden');
+            
+            // 顯示主要內容
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 300);
+        }
+
+        // 開始載入動畫
+        setTimeout(updateProgress, 800);
+
+        // 如果頁面已經載入完成，直接顯示內容
+        if (document.readyState === 'complete') {
+            setTimeout(showMainContent, 2000);
+        }
+
+        // 側邊欄功能
+        function initSidebar() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+
+            // 側邊欄選單切換
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // 移除所有active狀態
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    contentSections.forEach(s => s.classList.remove('active'));
+                    
+                    // 添加active狀態到點擊的選項
+                    link.classList.add('active');
+                    
+                    // 顯示對應的內容區域
+                    const targetSection = link.getAttribute('data-section');
+                    const targetContent = document.getElementById(targetSection);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+
+                    // 手機版：點擊後關閉側邊欄
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+
+            // 手機版選單按鈕
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('open');
+                });
+            }
+
+            // 點擊側邊欄外部關閉選單（手機版）
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && 
+                    !sidebar.contains(e.target) && 
+                    !mobileMenuBtn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        // 載入完成後初始化側邊欄
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initSidebar, 100);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980299cc834f4a2d',t:'MTc1ODA0OTE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
