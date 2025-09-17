@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>26團網站</title>
+    <title>網頁載入進度條</title>
     <style>
         * {
             margin: 0;
@@ -521,7 +521,13 @@
             
             <ul class="sidebar-menu">
                 <li class="sidebar-item">
-                    <a href="#emblem" class="sidebar-link active" data-section="emblem">
+                    <a href="#home" class="sidebar-link active" data-section="home">
+                        <span class="sidebar-icon">🏠</span>
+                        首頁
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#emblem" class="sidebar-link" data-section="emblem">
                         <span class="sidebar-icon">🛡️</span>
                         團徽
                     </a>
@@ -562,12 +568,45 @@
                         各分團聯絡資訊
                     </a>
                 </li>
+                <li class="sidebar-item" style="border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 1rem; padding-top: 1rem;">
+                    <a href="#login" class="sidebar-link" data-section="login">
+                        <span class="sidebar-icon">🔐</span>
+                        使用者登入
+                    </a>
+                </li>
             </ul>
         </nav>
 
         <!-- 內容區域 -->
         <main class="content-area">
-            <div id="emblem" class="content-section active">
+            <div id="home" class="content-section active">
+                <h1 class="welcome-title">歡迎來到童軍團</h1>
+                <p class="welcome-subtitle">
+                    培養品格、服務社會、探索自然 - 與我們一起成長！
+                </p>
+                
+                <div class="feature-cards">
+                    <div class="card">
+                        <div class="card-icon">🏕️</div>
+                        <h3 class="card-title">戶外探險</h3>
+                        <p class="card-description">體驗大自然的奧妙，學習野外生存技能</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🤝</div>
+                        <h3 class="card-title">團隊合作</h3>
+                        <p class="card-description">培養領導能力，學會與他人協作</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">❤️</div>
+                        <h3 class="card-title">服務精神</h3>
+                        <p class="card-description">關懷社會，用行動回饋社區</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="emblem" class="content-section">
                 <h1 class="welcome-title">團徽</h1>
                 <p class="welcome-subtitle">
                     我們的團徽象徵著童軍精神與傳統價值
@@ -741,6 +780,38 @@
                     </div>
                 </div>
             </div>
+
+            <div id="login" class="content-section">
+                <h1 class="welcome-title">使用者登入</h1>
+                <p class="welcome-subtitle">
+                    請輸入您的帳號密碼以存取會員專區
+                </p>
+                
+                <div class="leader-profile">
+                    <div class="card">
+                        <div class="card-icon">🔐</div>
+                        <h3 class="card-title">會員登入</h3>
+                        <div style="text-align: left; max-width: 300px; margin: 0 auto;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">帳號：</label>
+                                <input type="text" id="username" style="width: 100%; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(255,255,255,0.1); color: white; font-size: 1rem;" placeholder="請輸入帳號">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">密碼：</label>
+                                <input type="password" id="password" style="width: 100%; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(255,255,255,0.1); color: white; font-size: 1rem;" placeholder="請輸入密碼">
+                            </div>
+                            <button onclick="handleLogin()" style="width: 100%; padding: 0.75rem; background: linear-gradient(45deg, #ff6b6b, #feca57); border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s ease;">
+                                登入
+                            </button>
+                            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                                <span style="background: rgba(255,255,255,0.1); padding: 0.5rem; border-radius: 4px; display: inline-block;">
+                                    ⚠️ 這是展示用登入頁面
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -874,6 +945,40 @@
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(initSidebar, 100);
         });
+
+        // 登入功能
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('請輸入帳號和密碼！');
+                return;
+            }
+            
+            // 模擬登入驗證
+            if (username === 'scout' && password === '123456') {
+                alert('登入成功！歡迎回來！');
+                // 清空輸入框
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
+                // 跳轉到首頁
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.querySelector('[data-section="home"]').classList.add('active');
+                document.getElementById('home').classList.add('active');
+            } else {
+                alert('帳號或密碼錯誤！\n\n提示：帳號 scout，密碼 123456');
+            }
+        }
+
+        // 按 Enter 鍵登入
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && (document.getElementById('username') === document.activeElement || document.getElementById('password') === document.activeElement)) {
+                handleLogin();
+            }
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980299cc834f4a2d',t:'MTc1ODA0OTE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98081525776da9b3',t:'MTc1ODEwNjY0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
