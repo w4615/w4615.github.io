@@ -20,7 +20,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23228B22" stroke="%23FFD700" stroke-width="2"/><path d="M16 6 L18 12 L24 12 L19.5 16 L21.5 22 L16 18.5 L10.5 22 L12.5 16 L8 12 L14 12 Z" fill="%23FFD700"/><circle cx="16" cy="16" r="3" fill="%23FF0000"/></svg>') 16 16, auto;
         }
 
         /* 載入畫面 */
@@ -44,7 +43,6 @@
             visibility: hidden;
         }
 
-        /* 載入文字 */
         .loading-text {
             color: white;
             font-size: 2rem;
@@ -59,7 +57,6 @@
             50% { opacity: 1; }
         }
 
-        /* 進度條容器 */
         .progress-container {
             width: 300px;
             height: 40px;
@@ -71,7 +68,6 @@
             position: relative;
         }
 
-        /* 進度條軌道 */
         .progress-track {
             width: 100%;
             height: 6px;
@@ -82,7 +78,6 @@
             transform: translateY(-50%);
         }
 
-        /* 進度條 */
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
@@ -99,7 +94,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 童軍角色 */
         .scout-runner {
             position: absolute;
             top: -20px;
@@ -112,21 +106,12 @@
         }
 
         @keyframes running {
-            0%, 100% {
-                transform: translateY(0) rotate(-2deg);
-            }
-            25% {
-                transform: translateY(-2px) rotate(2deg);
-            }
-            50% {
-                transform: translateY(0) rotate(-1deg);
-            }
-            75% {
-                transform: translateY(-1px) rotate(1deg);
-            }
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            25% { transform: translateY(-2px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(-1deg); }
+            75% { transform: translateY(-1px) rotate(1deg); }
         }
 
-        /* 手臂動畫 */
         .arm-left {
             animation: arm-swing-left 0.4s ease-in-out infinite;
             transform-origin: 15.5px 14px;
@@ -147,7 +132,6 @@
             50% { transform: rotate(-30deg); }
         }
 
-        /* 進度百分比 */
         .progress-percentage {
             color: white;
             font-size: 1.2rem;
@@ -155,36 +139,85 @@
             margin-top: 1rem;
         }
 
-        /* 主要內容 */
-        .main-content {
+        /* 主要內容區域 */
+        .main-container {
             opacity: 0;
             transition: opacity 0.5s ease-in;
-            padding: 2rem;
-            text-align: center;
-            color: white;
+            min-height: 100vh;
+            padding-left: 0;
+            transition: padding-left 0.3s ease;
         }
 
-        .main-content.visible {
+        .main-container.visible {
             opacity: 1;
         }
 
-        .welcome-title {
+        .main-container.sidebar-open {
+            padding-left: 300px;
+        }
+
+        .content-page {
+            display: none;
+            padding: 2rem;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 4rem;
+        }
+
+        .page-title {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .welcome-subtitle {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
+        .page-subtitle {
+            font-size: 1.2rem;
             opacity: 0.9;
         }
 
-        .scout-badge {
-            width: 120px;
-            height: 120px;
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #FFD700;
+            text-align: center;
+        }
+
+        .section-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* 團徽樣式 */
+        .badge-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .badge-svg {
+            width: 200px;
+            height: 200px;
             margin: 2rem auto;
             animation: float 3s ease-in-out infinite;
         }
@@ -194,43 +227,239 @@
             50% { transform: translateY(-10px); }
         }
 
-        .features {
+        .badge-meaning {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            max-width: 1200px;
-            margin: 3rem auto;
+            margin-top: 3rem;
         }
 
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+        .meaning-item {
+            background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
+            border-radius: 15px;
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
+        .meaning-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
 
-        .feature-title {
+        /* 團歌樣式 */
+        .song-section {
+            margin: 2rem 0;
+        }
+
+        .lyrics {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .verse {
+            margin-bottom: 2rem;
+        }
+
+        .chorus {
+            font-weight: 600;
+            color: #FFD700;
+        }
+
+        /* 總團長樣式 */
+        .leader-profile {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .leader-photo {
+            text-align: center;
+        }
+
+        .leader-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin: 0 auto 1rem;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .leader-info h3 {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .leader-info p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        /* 歷任總團長樣式 */
+        .leaders-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .leaders-timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #FFD700;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background: #FFD700;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .timeline-year {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-name {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
-        .feature-description {
-            opacity: 0.9;
-            line-height: 1.6;
+        /* 聯絡資訊樣式 */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .contact-card h3 {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info {
+            text-align: left;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info .icon {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        /* 活動集錦樣式 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .gallery-content {
+            padding: 1.5rem;
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        /* 團員專區樣式 */
+        .member-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FFD700;
         }
 
         /* 側邊欄 */
@@ -273,6 +502,7 @@
 
         .sidebar-nav {
             list-style: none;
+            padding: 0;
         }
 
         .sidebar-nav li {
@@ -525,17 +755,13 @@
 
         /* 響應式設計 */
         @media (max-width: 768px) {
-            .welcome-title {
+            .page-title {
                 font-size: 2rem;
             }
             
-            .welcome-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .content-section {
+                padding: 2rem;
+                margin: 1rem;
             }
             
             .progress-container {
@@ -560,6 +786,23 @@
             .modal-content {
                 padding: 2rem;
                 margin: 1rem;
+            }
+
+            .leader-profile {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .member-features {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -591,20 +834,683 @@
         
         <nav>
             <ul class="sidebar-nav">
-                <li><a href="#home" class="active"><span class="icon">🏠</span>首頁</a></li>
-                <li><a href="#about"><span class="icon">ℹ️</span>關於我們</a></li>
-                <li><a href="#activities"><span class="icon">🏕️</span>活動資訊</a></li>
-                <li><a href="#gallery"><span class="icon">📸</span>活動相簿</a></li>
-                <li><a href="#news"><span class="icon">📰</span>最新消息</a></li>
-                <li><a href="#members"><span class="icon">👥</span>團員專區</a></li>
-                <li><a href="#contact"><span class="icon">📞</span>聯絡我們</a></li>
-                <li><a href="#resources"><span class="icon">📚</span>學習資源</a></li>
+                <li><a href="#" data-page="home" class="active"><span class="icon">🏠</span>首頁</a></li>
+                <li><a href="#" data-page="badge"><span class="icon">🛡️</span>團徽</a></li>
+                <li><a href="#" data-page="song"><span class="icon">🎵</span>團歌</a></li>
+                <li><a href="#" data-page="current-leader"><span class="icon">👨‍💼</span>現任總團長</a></li>
+                <li><a href="#" data-page="past-leaders"><span class="icon">📜</span>歷任總團長</a></li>
+                <li><a href="#" data-page="contact-info"><span class="icon">📞</span>各分團聯絡資訊</a></li>
+                <li><a href="#" data-page="activities-gallery"><span class="icon">📸</span>各分團活動集錦</a></li>
+                <li><a href="#" data-page="members"><span class="icon">👥</span>團員專區</a></li>
             </ul>
         </nav>
     </div>
 
     <!-- 覆蓋層 -->
     <div class="overlay" id="overlay"></div>
+
+    <!-- 載入畫面 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">基隆26團童軍網站載入中...</div>
+        
+        <div class="progress-container">
+            <div class="progress-track">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="scout-runner" id="scoutRunner">
+                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="12" r="6" fill="#FDBCB4"/>
+                    <path d="M14 8 Q20 4 26 8 L26 12 L14 12 Z" fill="#228B22"/>
+                    <circle cx="20" cy="10" r="2" fill="#FFD700"/>
+                    <rect x="16" y="18" width="8" height="12" rx="2" fill="#228B22"/>
+                    <rect class="arm-left" x="12" y="20" width="4" height="8" rx="2" fill="#FDBCB4"/>
+                    <rect class="arm-right" x="24" y="20" width="4" height="8" rx="2" fill="#FDBCB4"/>
+                    <rect x="17" y="30" width="2.5" height="8" rx="1" fill="#000080"/>
+                    <rect x="20.5" y="30" width="2.5" height="8" rx="1" fill="#000080"/>
+                    <ellipse cx="18.25" cy="38" rx="2" ry="1" fill="#8B4513"/>
+                    <ellipse cx="21.75" cy="38" rx="2" ry="1" fill="#8B4513"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="progress-percentage" id="progressPercentage">0%</div>
+    </div>
+
+    <!-- 主要內容容器 -->
+    <div class="main-container" id="mainContainer">
+        
+        <!-- 首頁 -->
+        <div class="content-page active" id="home">
+            <div class="page-header">
+                <h1 class="page-title">歡迎來到基隆26團</h1>
+                <p class="page-subtitle">培養品格 • 學習技能 • 服務社會</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="badge-display">
+                    <div class="badge-svg">
+                        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="95" fill="#228B22" stroke="#FFD700" stroke-width="6"/>
+                            <path d="M100 25 L120 70 L165 70 L130 95 L150 140 L100 115 L50 140 L70 95 L35 70 L80 70 Z" fill="#FFD700"/>
+                            <circle cx="100" cy="100" r="20" fill="#FF0000"/>
+                            <text x="100" y="170" text-anchor="middle" fill="#FFD700" font-size="16" font-weight="bold">基隆26團</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="member-features">
+                    <div class="member-card">
+                        <div class="member-icon">🏕️</div>
+                        <h3 class="member-title">戶外活動</h3>
+                        <p>豐富的露營、登山、野外求生等戶外體驗活動，培養孩子的冒險精神與自然親和力。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">🤝</div>
+                        <h3 class="member-title">團隊合作</h3>
+                        <p>透過小隊制度和團體活動，學習領導能力、溝通技巧與團隊精神。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">🎯</div>
+                        <h3 class="member-title">技能學習</h3>
+                        <p>學習各種實用技能，包括結繩、急救、野炊、手工藝等，培養解決問題的能力。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">❤️</div>
+                        <h3 class="member-title">服務精神</h3>
+                        <p>參與社區服務和公益活動，培養關懷他人、回饋社會的品格。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 團徽頁面 -->
+        <div class="content-page" id="badge">
+            <div class="page-header">
+                <h1 class="page-title">基隆26團團徽</h1>
+                <p class="page-subtitle">象徵我們的精神與理念</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="badge-display">
+                    <div class="badge-svg">
+                        <svg width="250" height="250" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="125" cy="125" r="120" fill="#228B22" stroke="#FFD700" stroke-width="8"/>
+                            <path d="M125 30 L145 80 L195 80 L155 110 L175 160 L125 130 L75 160 L95 110 L55 80 L105 80 Z" fill="#FFD700"/>
+                            <circle cx="125" cy="125" r="25" fill="#FF0000"/>
+                            <text x="125" y="200" text-anchor="middle" fill="#FFD700" font-size="18" font-weight="bold">基隆26團</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="section-title">團徽意義</div>
+                <div class="badge-meaning">
+                    <div class="meaning-item">
+                        <div class="meaning-icon">🟢</div>
+                        <h3>綠色圓形</h3>
+                        <p>代表大自然與環保意識，象徵童軍與自然和諧共處的理念，培養愛護環境的責任感。</p>
+                    </div>
+                    
+                    <div class="meaning-item">
+                        <div class="meaning-icon">⭐</div>
+                        <h3>金色五角星</h3>
+                        <p>象徵童軍的五大目標：品格、健康、手工技能、服務精神、戶外活動，指引我們前進的方向。</p>
+                    </div>
+                    
+                    <div class="meaning-item">
+                        <div class="meaning-icon">🔴</div>
+                        <h3>紅色圓心</h3>
+                        <p>代表熱忱與活力，象徵童軍們對活動的熱情參與和對團體的向心力。</p>
+                    </div>
+                    
+                    <div class="meaning-item">
+                        <div class="meaning-icon">🏅</div>
+                        <h3>金色邊框</h3>
+                        <p>象徵榮譽與品質，代表基隆26團追求卓越、維護傳統的精神。</p>
+                    </div>
+                </div>
+
+                <div class="section-content">
+                    <p>基隆26團的團徽設計融合了童軍運動的核心價值與在地特色。綠色的底色象徵著我們對自然環境的熱愛與保護，金色的五角星代表童軍運動的五大支柱，而中央的紅色圓點則象徵著我們團結一心、充滿活力的團隊精神。</p>
+                    
+                    <p>這個團徽不僅是我們的標誌，更是我們共同理念的象徵。每當看到這個團徽，就提醒我們要秉持童軍精神，在日常生活中實踐「準備、日行一善、人生以服務為目的」的座右銘。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 團歌頁面 -->
+        <div class="content-page" id="song">
+            <div class="page-header">
+                <h1 class="page-title">基隆26團團歌</h1>
+                <p class="page-subtitle">唱出我們的精神與理想</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-title">團歌歌詞</div>
+                
+                <div class="lyrics">
+                    <div class="verse">
+                        <strong>第一段：</strong><br>
+                        基隆港邊好風光，二十六團志氣昂<br>
+                        童軍精神永發揚，服務人群最榮光<br>
+                        準備準備時時準備，日行一善記心房<br>
+                        團結合作向前行，基隆二六最輝煌
+                    </div>
+                    
+                    <div class="verse chorus">
+                        <strong>副歌：</strong><br>
+                        我們是快樂的童軍，我們是勇敢的夥伴<br>
+                        在山林中學習成長，在服務中找到方向<br>
+                        基隆二六團，我們的家<br>
+                        永遠團結，永遠向前，永遠不怕
+                    </div>
+                    
+                    <div class="verse">
+                        <strong>第二段：</strong><br>
+                        野外活動練身心，團隊合作建友情<br>
+                        技能學習不間斷，品格培養最重要<br>
+                        誠實勇敢有禮貌，助人為樂是本分<br>
+                        基隆港都好兒女，童軍精神代代傳
+                    </div>
+                </div>
+
+                <div class="song-section">
+                    <div class="section-title">團歌精神</div>
+                    <div class="section-content">
+                        <p>基隆26團團歌體現了我們團的核心價值觀和精神理念。歌詞中融入了基隆在地特色，以「基隆港邊」為開頭，展現我們對家鄉的熱愛與認同。</p>
+                        
+                        <p>團歌強調了童軍運動的三大要素：「準備、日行一善、服務人群」，這不僅是我們的座右銘，更是我們日常行為的準則。透過歌唱，我們不斷提醒自己要實踐這些理念。</p>
+                        
+                        <p>每次團集會時，我們都會齊聲高唱團歌，這不僅增強了團隊的凝聚力，也讓每位團員都能感受到身為基隆26團一份子的榮耀與責任。</p>
+                    </div>
+                </div>
+
+                <div class="song-section">
+                    <div class="section-title">演唱時機</div>
+                    <div class="section-content">
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li>🎵 每次團集會開始時</li>
+                            <li>🎵 重要慶典與活動</li>
+                            <li>🎵 新團員入團儀式</li>
+                            <li>🎵 露營營火晚會</li>
+                            <li>🎵 團慶紀念活動</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 現任總團長頁面 -->
+        <div class="content-page" id="current-leader">
+            <div class="page-header">
+                <h1 class="page-title">現任總團長</h1>
+                <p class="page-subtitle">領導我們前進的舵手</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="leader-profile">
+                    <div class="leader-photo">
+                        <div class="leader-avatar">👨‍💼</div>
+                        <h3>王志明 總團長</h3>
+                        <p><strong>任期：</strong>2020年至今</p>
+                    </div>
+                    
+                    <div class="leader-info">
+                        <h3>領導理念</h3>
+                        <p>「童軍教育不只是活動，更是品格的塑造。我們要培養的不只是技能，更是孩子們面對未來挑戰的勇氣與智慧。」</p>
+                        
+                        <h3>專業背景</h3>
+                        <p>王總團長擁有20年的童軍服務經驗，曾擔任多個童軍團的團長職務。具有教育學碩士學位，專精於青少年發展與戶外教育。目前任職於基隆市教育局，負責學生事務相關工作。</p>
+                        
+                        <h3>服務經歷</h3>
+                        <p>• 基隆市童軍會理事<br>
+                        • 全國童軍大露營籌備委員<br>
+                        • 童軍木章訓練班訓練員<br>
+                        • 基隆市優秀童軍服務員</p>
+                    </div>
+                </div>
+
+                <div class="section-title">總團長的話</div>
+                <div class="section-content">
+                    <p>親愛的團員們、家長們，以及所有關心基隆26團的朋友們：</p>
+                    
+                    <p>很榮幸能夠擔任基隆26團的總團長，帶領這個充滿活力與傳統的團隊。在這個快速變遷的時代，童軍教育的價值更顯珍貴。我們不只是在教導孩子們野外技能，更重要的是培養他們的品格、責任感，以及面對困難時的勇氣。</p>
+                    
+                    <p>基隆26團有著悠久的歷史與優良的傳統，我們將在傳承中創新，在創新中保持初心。我們的目標是讓每一位團員都能在這裡找到成長的動力，學會關懷他人，培養領導能力，成為對社會有貢獻的好公民。</p>
+                    
+                    <p>讓我們一起努力，讓基隆26團成為孩子們最美好的回憶，也是他們人生路上最重要的養分。準備！</p>
+                    
+                    <p style="text-align: right; margin-top: 2rem;"><strong>王志明 總團長</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 歷任總團長頁面 -->
+        <div class="content-page" id="past-leaders">
+            <div class="page-header">
+                <h1 class="page-title">歷任總團長</h1>
+                <p class="page-subtitle">傳承與發展的歷史軌跡</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-title">歷任總團長名錄</div>
+                
+                <div class="leaders-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2020年 - 至今</div>
+                        <div class="timeline-name">王志明 總團長</div>
+                        <p>現任總團長，致力於推動數位化管理與現代化童軍教育，在疫情期間成功轉型線上活動，維持團務正常運作。推動環保教育與社區服務，獲得多項殊榮。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2015年 - 2020年</div>
+                        <div class="timeline-name">陳美玲 總團長</div>
+                        <p>首位女性總團長，大力推動性別平等教育與多元化活動。在任期間成功舉辦基隆26團50週年團慶，建立完善的團員培訓制度，培養出多位優秀的服務員。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2010年 - 2015年</div>
+                        <div class="timeline-name">李建國 總團長</div>
+                        <p>積極推動國際交流活動，與日本、韓國童軍團建立友好關係。建立團史館，完整保存團隊歷史文物。推動「一團一特色」計畫，發展海洋教育特色課程。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2005年 - 2010年</div>
+                        <div class="timeline-name">張文雄 總團長</div>
+                        <p>致力於戶外教育推廣，建立完善的安全管理制度。在任期間團員人數達到歷史新高，成功舉辦多次大型露營活動，提升團隊在童軍界的知名度。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">2000年 - 2005年</div>
+                        <div class="timeline-name">劉志華 總團長</div>
+                        <p>推動團務現代化管理，建立電腦化團員資料系統。積極參與社區服務，建立團隊良好社會形象。培養多位木章持有人，奠定團隊發展基礎。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">1995年 - 2000年</div>
+                        <div class="timeline-name">黃金龍 總團長</div>
+                        <p>團隊重整時期的重要領導者，重新建立團隊組織架構與活動制度。推動家長參與，建立家長委員會制度，奠定團隊穩定發展的基礎。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">1990年 - 1995年</div>
+                        <div class="timeline-name">吳明德 總團長</div>
+                        <p>推動團隊制度化發展，建立完善的晉級制度與獎勵機制。積極培訓服務員，提升團隊整體素質。在任期間團隊獲得多項全國性獎項。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">1985年 - 1990年</div>
+                        <div class="timeline-name">林正雄 總團長</div>
+                        <p>團隊發展的重要推手，建立多項傳統活動與儀式。推動團歌創作與團徽設計，建立團隊文化認同。培養出多位後來成為童軍界重要人物的團員。</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">1970年 - 1985年</div>
+                        <div class="timeline-name">創團總團長 許文昌</div>
+                        <p>基隆26團創始人，奠定團隊發展的基石。在艱困的環境中創立團隊，建立基本組織架構與活動模式。其遠見與堅持，為後續發展奠定了堅實的基礎。</p>
+                    </div>
+                </div>
+
+                <div class="section-title">傳承精神</div>
+                <div class="section-content">
+                    <p>基隆26團能有今日的成就，全賴歷任總團長的無私奉獻與卓越領導。每一位總團長都在不同的時代背景下，為團隊的發展貢獻心力，留下珍貴的經驗與智慧。</p>
+                    
+                    <p>從創團總團長許文昌先生的篳路藍縷，到現任王志明總團長的創新發展，我們看到的是一脈相承的童軍精神，以及與時俱進的教育理念。這些寶貴的經驗，將繼續指引我們前進的方向。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 各分團聯絡資訊頁面 -->
+        <div class="content-page" id="contact-info">
+            <div class="page-header">
+                <h1 class="page-title">各分團聯絡資訊</h1>
+                <p class="page-subtitle">與我們保持聯繫</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-title">分團聯絡方式</div>
+                
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <h3>幼童軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👨‍🏫</span><strong>團長：</strong>李小華</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0912-345-678</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>beaver@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週六 14:00-16:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>6-8歲</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>幼女童軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👩‍🏫</span><strong>團長：</strong>王美玲</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0923-456-789</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>brownie@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週六 14:00-16:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>6-8歲</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>童子軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👨‍🏫</span><strong>團長：</strong>陳志強</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0934-567-890</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>scout@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週六 19:00-21:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>8-12歲</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>女童軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👩‍🏫</span><strong>團長：</strong>林淑芬</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0945-678-901</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>guide@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週六 19:00-21:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>8-12歲</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>行義童軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👨‍🏫</span><strong>團長：</strong>張建民</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0956-789-012</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>venture@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週日 19:00-21:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>12-17歲</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <h3>蘭姐女童軍團</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👩‍🏫</span><strong>團長：</strong>黃雅慧</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0967-890-123</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>ranger@kl26.org.tw</p>
+                            <p><span class="icon">🕐</span><strong>集會時間：</strong>每週日 19:00-21:00</p>
+                            <p><span class="icon">📍</span><strong>集會地點：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">👥</span><strong>適合年齡：</strong>12-17歲</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">總團聯絡資訊</div>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <h3>基隆26團總團部</h3>
+                        <div class="contact-info">
+                            <p><span class="icon">👨‍💼</span><strong>總團長：</strong>王志明</p>
+                            <p><span class="icon">📱</span><strong>電話：</strong>0978-901-234</p>
+                            <p><span class="icon">☎️</span><strong>團部電話：</strong>(02) 2462-6789</p>
+                            <p><span class="icon">✉️</span><strong>信箱：</strong>info@kl26.org.tw</p>
+                            <p><span class="icon">🌐</span><strong>網站：</strong>www.kl26.org.tw</p>
+                            <p><span class="icon">📍</span><strong>地址：</strong>基隆市中正區中正路123號</p>
+                            <p><span class="icon">🕐</span><strong>辦公時間：</strong>週一至週五 18:00-21:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">如何加入我們</div>
+                <div class="section-content">
+                    <p><strong>報名流程：</strong></p>
+                    <ol style="padding-left: 2rem; line-height: 2;">
+                        <li>請先聯絡適合年齡的分團團長</li>
+                        <li>參加體驗活動，了解童軍生活</li>
+                        <li>填寫入團申請表</li>
+                        <li>繳交相關費用與文件</li>
+                        <li>參加入團儀式，正式成為團員</li>
+                    </ol>
+                    
+                    <p><strong>需要準備的文件：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>入團申請表</li>
+                        <li>健康檢查表</li>
+                        <li>家長同意書</li>
+                        <li>2吋照片2張</li>
+                        <li>戶口名簿影本</li>
+                    </ul>
+                    
+                    <p>歡迎隨時與我們聯絡，我們很樂意為您詳細介紹童軍活動的內容與意義！</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 各分團活動集錦頁面 -->
+        <div class="content-page" id="activities-gallery">
+            <div class="page-header">
+                <h1 class="page-title">各分團活動集錦</h1>
+                <p class="page-subtitle">精彩回憶與美好時光</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-title">2024年度精彩活動</div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <div class="gallery-image">🏕️</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">春季大露營</h3>
+                            <p>在陽明山國家公園舉辦的三天兩夜大露營，團員們學習搭帳篷、野炊、營火晚會等技能，度過難忘的戶外時光。</p>
+                            <p><strong>時間：</strong>2024年3月15-17日<br><strong>地點：</strong>陽明山國家公園</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🌊</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">海洋教育體驗</h3>
+                            <p>結合基隆海港城市特色，帶領團員參訪海洋科技博物館，學習海洋知識，並進行淨灘活動，培養環保意識。</p>
+                            <p><strong>時間：</strong>2024年4月20日<br><strong>地點：</strong>海洋科技博物館</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🎯</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">技能競賽大會</h3>
+                            <p>各分團團員展現平時學習成果，包括結繩、急救、野外求生等技能競賽，促進團員間的良性競爭與學習。</p>
+                            <p><strong>時間：</strong>2024年5月25日<br><strong>地點：</strong>基隆市立體育館</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🎪</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">團慶嘉年華</h3>
+                            <p>慶祝基隆26團成立54週年，舉辦盛大的團慶活動，包括表演、遊戲、美食攤位，邀請家長與社區民眾共同參與。</p>
+                            <p><strong>時間：</strong>2024年6月8日<br><strong>地點：</strong>基隆文化中心廣場</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🏔️</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">登山健行活動</h3>
+                            <p>挑戰基隆周邊山區，培養團員的體能與毅力。在專業領隊帶領下，安全完成登山挑戰，欣賞美麗的山景。</p>
+                            <p><strong>時間：</strong>2024年7月13日<br><strong>地點：</strong>基隆姜子寮山</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🎨</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">手工藝創作營</h3>
+                            <p>學習傳統手工藝技能，包括編織、木工、陶藝等，培養團員的創造力與耐心，每位團員都完成了精美的作品。</p>
+                            <p><strong>時間：</strong>2024年8月10-12日<br><strong>地點：</strong>基隆市青少年館</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🤝</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">社區服務日</h3>
+                            <p>實踐童軍服務精神，團員們前往社區進行環境清潔、關懷長者等服務活動，獲得社區民眾的高度讚揚。</p>
+                            <p><strong>時間：</strong>2024年9月14日<br><strong>地點：</strong>基隆市各社區</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🔥</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">中秋營火晚會</h3>
+                            <p>在中秋佳節舉辦溫馨的營火晚會，團員們表演才藝、分享月餅，在營火旁度過溫暖的夜晚。</p>
+                            <p><strong>時間：</strong>2024年9月29日<br><strong>地點：</strong>基隆市和平島公園</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="gallery-image">🏃‍♂️</div>
+                        <div class="gallery-content">
+                            <h3 class="gallery-title">體能挑戰賽</h3>
+                            <p>設計多項體能關卡，包括攀岩、繩索、障礙跑等，讓團員在遊戲中鍛鍊體能，培養不怕困難的精神。</p>
+                            <p><strong>時間：</strong>2024年10月19日<br><strong>地點：</strong>基隆市立體育場</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">活動特色</div>
+                <div class="section-content">
+                    <p>基隆26團的活動設計兼具教育性與趣味性，我們相信在快樂的氛围中學習，能讓孩子們獲得最好的成長體驗。每項活動都經過精心規劃，確保安全性與教育意義。</p>
+                    
+                    <p>我們的活動涵蓋戶外探險、技能學習、藝術創作、社會服務等多個面向，讓團員們能夠全方位發展。同時，我們也重視團隊合作與領導能力的培養，讓每位團員都有機會擔任不同的角色與責任。</p>
+                    
+                    <p>歡迎家長與社區朋友關注我們的活動訊息，也歡迎有興趣的朋友加入我們的行列！</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 團員專區頁面 -->
+        <div class="content-page" id="members">
+            <div class="page-header">
+                <h1 class="page-title">團員專區</h1>
+                <p class="page-subtitle">專屬於團員的服務與資源</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-title">會員服務</div>
+                
+                <div class="member-features">
+                    <div class="member-card">
+                        <div class="member-icon">📚</div>
+                        <h3 class="member-title">學習資源</h3>
+                        <p>提供豐富的童軍技能學習資料、影片教學、電子書籍等資源，讓團員可以隨時複習與進修。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">🏆</div>
+                        <h3 class="member-title">晉級系統</h3>
+                        <p>完整的晉級制度與徽章系統，記錄每位團員的學習進度與成就，激勵持續成長。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">📅</div>
+                        <h3 class="member-title">活動報名</h3>
+                        <p>優先獲得活動資訊與報名權利，包括露營、研習、競賽等各類精彩活動。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">👥</div>
+                        <h3 class="member-title">社群交流</h3>
+                        <p>專屬的團員交流平台，可以與同伴分享經驗、討論問題、建立深厚友誼。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">🎯</div>
+                        <h3 class="member-title">個人檔案</h3>
+                        <p>完整記錄個人在團內的各項表現、參與活動、獲得徽章等資訊，建立專屬檔案。</p>
+                    </div>
+                    
+                    <div class="member-card">
+                        <div class="member-icon">📞</div>
+                        <h3 class="member-title">專屬客服</h3>
+                        <p>提供團員專屬的諮詢服務，解答關於活動、學習、晉級等各種問題。</p>
+                    </div>
+                </div>
+
+                <div class="section-title">晉級徽章系統</div>
+                <div class="section-content">
+                    <p><strong>幼童軍晉級徽章：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>🌟 小海狸徽章 - 基礎技能認證</li>
+                        <li>⭐ 海狸徽章 - 進階技能認證</li>
+                        <li>🏅 金海狸徽章 - 優秀表現認證</li>
+                    </ul>
+                    
+                    <p><strong>童子軍晉級徽章：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>🔰 初級童軍徽章 - 基本技能掌握</li>
+                        <li>🎯 中級童軍徽章 - 專業技能發展</li>
+                        <li>🏆 高級童軍徽章 - 領導能力展現</li>
+                    </ul>
+                    
+                    <p><strong>專科徽章：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>🏕️ 露營專科 - 戶外生活技能</li>
+                        <li>🚑 急救專科 - 緊急救護技能</li>
+                        <li>🌱 自然專科 - 環境保護知識</li>
+                        <li>🎨 工藝專科 - 手工藝創作能力</li>
+                        <li>🏃‍♂️ 體能專科 - 運動健身技能</li>
+                    </ul>
+                </div>
+
+                <div class="section-title">會員權益</div>
+                <div class="section-content">
+                    <p><strong>學習支援：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>免費參加定期技能研習課程</li>
+                        <li>優先參與特殊活動與營隊</li>
+                        <li>獲得學習資料與教材支援</li>
+                        <li>專業服務員一對一指導</li>
+                    </ul>
+                    
+                    <p><strong>活動優惠：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>團內活動享有會員優惠價格</li>
+                        <li>免費參加團慶與節慶活動</li>
+                        <li>優先報名熱門活動與營隊</li>
+                        <li>獲得活動紀念品與獎品</li>
+                    </ul>
+                    
+                    <p><strong>成長記錄：</strong></p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>完整的學習歷程記錄</li>
+                        <li>個人成就與徽章展示</li>
+                        <li>參與活動證明與認證</li>
+                        <li>推薦信與表現證明</li>
+                    </ul>
+                </div>
+
+                <div class="section-title">如何登入會員系統</div>
+                <div class="section-content">
+                    <p>請點擊右上角或側邊欄的「登入」按鈕，使用您的會員帳號密碼登入系統。如果您是新團員，請先完成註冊程序。</p>
+                    
+                    <p>登入後您可以：</p>
+                    <ul style="padding-left: 2rem; line-height: 2;">
+                        <li>查看個人資料與學習進度</li>
+                        <li>報名參加各項活動</li>
+                        <li>下載學習資源與資料</li>
+                        <li>與其他團員交流互動</li>
+                        <li>查詢晉級與徽章狀況</li>
+                    </ul>
+                    
+                    <p>如有任何問題，請聯絡團部或各分團團長，我們將竭誠為您服務！</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 登入模態框 -->
     <div class="modal" id="loginModal">
@@ -662,85 +1568,6 @@
         </div>
     </div>
 
-    <!-- 載入畫面 -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-text">基隆26團童軍網站載入中...</div>
-        
-        <div class="progress-container">
-            <div class="progress-track">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            
-            <!-- 童軍角色 SVG -->
-            <div class="scout-runner" id="scoutRunner">
-                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 頭部 -->
-                    <circle cx="20" cy="12" r="6" fill="#FDBCB4"/>
-                    <!-- 帽子 -->
-                    <path d="M14 8 Q20 4 26 8 L26 12 L14 12 Z" fill="#228B22"/>
-                    <!-- 帽徽 -->
-                    <circle cx="20" cy="10" r="2" fill="#FFD700"/>
-                    <!-- 身體 -->
-                    <rect x="16" y="18" width="8" height="12" rx="2" fill="#228B22"/>
-                    <!-- 左手臂 -->
-                    <rect class="arm-left" x="12" y="20" width="4" height="8" rx="2" fill="#FDBCB4"/>
-                    <!-- 右手臂 -->
-                    <rect class="arm-right" x="24" y="20" width="4" height="8" rx="2" fill="#FDBCB4"/>
-                    <!-- 腿部 -->
-                    <rect x="17" y="30" width="2.5" height="8" rx="1" fill="#000080"/>
-                    <rect x="20.5" y="30" width="2.5" height="8" rx="1" fill="#000080"/>
-                    <!-- 鞋子 -->
-                    <ellipse cx="18.25" cy="38" rx="2" ry="1" fill="#8B4513"/>
-                    <ellipse cx="21.75" cy="38" rx="2" ry="1" fill="#8B4513"/>
-                </svg>
-            </div>
-        </div>
-        
-        <div class="progress-percentage" id="progressPercentage">0%</div>
-    </div>
-
-    <!-- 主要內容 -->
-    <div class="main-content" id="mainContent">
-        <h1 class="welcome-title">歡迎來到基隆26團</h1>
-        <p class="welcome-subtitle">培養品格 • 學習技能 • 服務社會</p>
-        
-        <!-- 童軍徽章 -->
-        <div class="scout-badge">
-            <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="60" cy="60" r="55" fill="#228B22" stroke="#FFD700" stroke-width="4"/>
-                <path d="M60 15 L70 40 L95 40 L76 55 L86 80 L60 65 L34 80 L44 55 L25 40 L50 40 Z" fill="#FFD700"/>
-                <circle cx="60" cy="60" r="12" fill="#FF0000"/>
-                <text x="60" y="95" text-anchor="middle" fill="#FFD700" font-size="12" font-weight="bold">基隆26團</text>
-            </svg>
-        </div>
-
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🏕️</div>
-                <h3 class="feature-title">戶外活動</h3>
-                <p class="feature-description">豐富的露營、登山、野外求生等戶外體驗活動，培養孩子的冒險精神與自然親和力。</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🤝</div>
-                <h3 class="feature-title">團隊合作</h3>
-                <p class="feature-description">透過小隊制度和團體活動，學習領導能力、溝通技巧與團隊精神。</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3 class="feature-title">技能學習</h3>
-                <p class="feature-description">學習各種實用技能，包括結繩、急救、野炊、手工藝等，培養解決問題的能力。</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">❤️</div>
-                <h3 class="feature-title">服務精神</h3>
-                <p class="feature-description">參與社區服務和公益活動，培養關懷他人、回饋社會的品格。</p>
-            </div>
-        </div>
-    </div>
-
     <script>
         // 載入進度模擬
         let progress = 0;
@@ -748,18 +1575,16 @@
         const progressPercentage = document.getElementById('progressPercentage');
         const scoutRunner = document.getElementById('scoutRunner');
         const loadingScreen = document.getElementById('loadingScreen');
-        const mainContent = document.getElementById('mainContent');
+        const mainContainer = document.getElementById('mainContainer');
 
         function updateProgress() {
             if (progress < 100) {
-                // 隨機增加進度，讓載入看起來更自然
                 const increment = Math.random() * 15 + 5;
                 progress = Math.min(progress + increment, 100);
                 
                 progressBar.style.width = progress + '%';
                 progressPercentage.textContent = Math.floor(progress) + '%';
                 
-                // 移動童軍角色
                 const containerWidth = 300;
                 const runnerPosition = (progress / 100) * (containerWidth - 40);
                 scoutRunner.style.left = runnerPosition + 'px';
@@ -767,19 +1592,16 @@
                 if (progress < 100) {
                     setTimeout(updateProgress, 200 + Math.random() * 300);
                 } else {
-                    // 載入完成
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
-                        mainContent.classList.add('visible');
+                        mainContainer.classList.add('visible');
                     }, 500);
                 }
             }
         }
 
-        // 開始載入動畫
         setTimeout(updateProgress, 500);
 
-        // DOM 載入完成後初始化所有功能
         document.addEventListener('DOMContentLoaded', function() {
             // 側邊欄功能
             const menuToggle = document.getElementById('menuToggle');
@@ -798,66 +1620,74 @@
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
 
+            // 頁面切換功能
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            const contentPages = document.querySelectorAll('.content-page');
+
             // 側邊欄切換
             menuToggle.addEventListener('click', function() {
                 sidebar.classList.toggle('open');
                 overlay.classList.toggle('show');
             });
 
-            // 點擊覆蓋層關閉側邊欄
             overlay.addEventListener('click', function() {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('show');
             });
 
-            // 側邊欄導航點擊
-            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            // 頁面導航
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
+                    const targetPage = this.getAttribute('data-page');
+                    
                     // 移除所有 active 類別
                     navLinks.forEach(l => l.classList.remove('active'));
-                    // 添加 active 到當前點擊的連結
+                    contentPages.forEach(p => p.classList.remove('active'));
+                    
+                    // 添加 active 到當前選擇
                     this.classList.add('active');
+                    document.getElementById(targetPage).classList.add('active');
                     
                     // 關閉側邊欄
                     sidebar.classList.remove('open');
                     overlay.classList.remove('show');
-                    
-                    // 這裡可以添加頁面切換邏輯
-                    console.log('導航到:', this.textContent.trim());
                 });
             });
 
-            // 登入按鈕
-            loginBtn.addEventListener('click', function() {
+            // 登入按鈕事件
+            function openLoginModal() {
                 loginModal.classList.add('show');
-            });
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            }
 
-            // 註冊按鈕
-            registerBtn.addEventListener('click', function() {
+            function openRegisterModal() {
                 registerModal.classList.add('show');
-            });
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            }
 
-            // 關閉登入模態框
+            loginBtn.addEventListener('click', openLoginModal);
+            registerBtn.addEventListener('click', openRegisterModal);
+
+            // 關閉模態框
             loginClose.addEventListener('click', function() {
                 loginModal.classList.remove('show');
             });
 
-            // 關閉註冊模態框
             registerClose.addEventListener('click', function() {
                 registerModal.classList.remove('show');
             });
 
-            // 切換到註冊
+            // 切換登入/註冊
             switchToRegister.addEventListener('click', function(e) {
                 e.preventDefault();
                 loginModal.classList.remove('show');
                 registerModal.classList.add('show');
             });
 
-            // 切換到登入
             switchToLogin.addEventListener('click', function(e) {
                 e.preventDefault();
                 registerModal.classList.remove('show');
@@ -877,19 +1707,17 @@
                 }
             });
 
-            // 登入表單提交
+            // 表單提交
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 const email = document.getElementById('loginEmail').value;
                 const password = document.getElementById('loginPassword').value;
                 
-                // 模擬登入驗證
                 if (email && password) {
                     alert('登入成功！歡迎回來 ' + email);
                     loginModal.classList.remove('show');
                     
-                    // 更新按鈕狀態
                     loginBtn.textContent = '已登入';
                     loginBtn.style.background = 'rgba(76, 175, 80, 0.8)';
                     registerBtn.style.display = 'none';
@@ -898,7 +1726,6 @@
                 }
             });
 
-            // 註冊表單提交
             registerForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -908,18 +1735,15 @@
                 const password = document.getElementById('registerPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 
-                // 驗證密碼一致性
                 if (password !== confirmPassword) {
                     alert('密碼與確認密碼不一致');
                     return;
                 }
                 
-                // 模擬註冊
                 if (name && email && phone && password) {
                     alert('註冊成功！歡迎加入基隆26團 ' + name);
                     registerModal.classList.remove('show');
                     
-                    // 自動切換到登入狀態
                     loginBtn.textContent = '已登入';
                     loginBtn.style.background = 'rgba(76, 175, 80, 0.8)';
                     registerBtn.style.display = 'none';
@@ -927,34 +1751,16 @@
                     alert('請填寫完整的註冊資訊');
                 }
             });
-
-            // 為特色卡片添加點擊效果
-            const featureCards = document.querySelectorAll('.feature-card');
-            featureCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = 'translateY(-5px)';
-                    }, 150);
-                });
-            });
         });
 
-        // 防止右鍵選單
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // 添加鍵盤快捷鍵
+        // 鍵盤快捷鍵
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                // 關閉載入畫面
                 if (!loadingScreen.classList.contains('hidden')) {
                     loadingScreen.classList.add('hidden');
-                    mainContent.classList.add('visible');
+                    mainContainer.classList.add('visible');
                 }
                 
-                // 關閉側邊欄
                 const sidebar = document.getElementById('sidebar');
                 const overlay = document.getElementById('overlay');
                 if (sidebar && sidebar.classList.contains('open')) {
@@ -962,7 +1768,6 @@
                     overlay.classList.remove('show');
                 }
                 
-                // 關閉模態框
                 const loginModal = document.getElementById('loginModal');
                 const registerModal = document.getElementById('registerModal');
                 if (loginModal && loginModal.classList.contains('show')) {
@@ -974,5 +1779,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9876d737d06b4a51',t:'MTc1OTI2ODAyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98771a2f05424a51',t:'MTc1OTI3MDc3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
